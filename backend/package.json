@@ -25,6 +25,7 @@
     "@nestjs/common": "^11.0.1",
     "@nestjs/core": "^11.0.1",
     "@nestjs/platform-express": "^11.1.4",
+    "@nestjs/typeorm": "^11.0.0",
     "csv-parse": "^6.1.0",
     "docx": "^9.5.1",
     "multer": "^2.0.2",
