@@ -13,8 +13,8 @@ export class ChatController {
   }
 
   @Get()
-  async getChats(@Query('employeeId') employeeId?: string) {
-    return this.chatService.getChats(employeeId);
+  async getChats(@Query('employeeId') employeeId?: string, @Query('documentId') documentId?: string) {
+    return this.chatService.getChats(employeeId, documentId ? parseInt(documentId) : undefined);
   }
 
   @Get(':id')

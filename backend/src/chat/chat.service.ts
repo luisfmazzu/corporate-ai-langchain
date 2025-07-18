@@ -23,27 +23,36 @@ export class ChatService {
   async createChat(createChatDto: CreateChatDto): Promise<{ chatId: number }> {
     const chat = this.chatRepository.create({
       title: createChatDto.title,
-      documentId: createChatDto.documentId,
       employeeId: createChatDto.employeeId,
+      documentId: createChatDto.documentId,
     });
 
     const savedChat = await this.chatRepository.save(chat);
     return { chatId: savedChat.id };
   }
 
-  async getChats(employeeId?: string): Promise<Chat[]> {
-    const where = employeeId ? { employeeId } : {};
-    return this.chatRepository.find({
-      where,
-      relations: ['document'],
-      order: { updatedAt: 'DESC' },
-    });
+  async getChats(employeeId?: string, documentId?: number): Promise<Chat[]> {
+    const query = this.chatRepository
+      .createQueryBuilder('chat')
+      .leftJoinAndSelect('chat.messages', 'messages')
+      .orderBy('chat.updatedAt', 'DESC')
+      .addOrderBy('messages.timestamp', 'ASC');
+
+    if (employeeId) {
+      query.andWhere('chat.employeeId = :employeeId', { employeeId });
+    }
+
+    if (documentId) {
+      query.andWhere('chat.documentId = :documentId', { documentId });
+    }
+
+    return query.getMany();
   }
 
   async getChat(id: number): Promise<Chat | null> {
     return this.chatRepository.findOne({
       where: { id },
-      relations: ['messages', 'document'],
+      relations: ['messages'],
       order: { messages: { timestamp: 'ASC' } },
     });
   }
