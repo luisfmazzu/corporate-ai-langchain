@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import Link from "next/link";
+import { ErrorBoundary } from "../components/ErrorBoundary";
 
 export const metadata: Metadata = {
   title: "Company's Private AI Document Q&A System",
@@ -65,7 +66,9 @@ export default function RootLayout({
         </nav>
 
         {/* Main Content */}
-        <main>{children}</main>
+        <ErrorBoundary>
+          <main>{children}</main>
+        </ErrorBoundary>
       </body>
     </html>
   );
