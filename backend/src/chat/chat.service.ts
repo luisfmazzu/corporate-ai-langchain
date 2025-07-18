@@ -40,7 +40,7 @@ export class ChatService {
     });
   }
 
-  async getChat(id: number): Promise<Chat> {
+  async getChat(id: number): Promise<Chat | null> {
     return this.chatRepository.findOne({
       where: { id },
       relations: ['messages', 'document'],
@@ -70,6 +70,7 @@ export class ChatService {
     const result = await this.langChainService.processQuery(
       queryDto.query,
       document.extractedText,
+      queryDto.chatId,
     );
 
     // Save AI response
