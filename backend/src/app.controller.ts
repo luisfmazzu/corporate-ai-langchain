@@ -10,6 +10,14 @@ export class AppController {
     return this.appService.getHello();
   }
 
+  @Get('health')
+  getHealth(): { status: string; timestamp: string } {
+    return {
+      status: 'healthy',
+      timestamp: new Date().toISOString(),
+    };
+  }
+
   @Get('documents')
   async getAllDocuments() {
     return this.appService.getAllDocuments();
